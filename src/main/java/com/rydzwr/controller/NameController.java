@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/v1/validator")
+@RequestMapping("/api/v1")
 public class NameController {
 
     private final ServiceFactory factory;
@@ -19,9 +19,9 @@ public class NameController {
         this.factory = factory;
     }
 
-    @PostMapping
-    public ResponseEntity<NameJson> validateName(@RequestBody NameJson nameJson) {
-        SendMethodStrategy service = factory.chooseStrategy(nameJson.getValue());
+    @PostMapping(value = "/validator")
+    public ResponseEntity<NameJson> validateName(@RequestBody NameJson nameJson) throws NoSuchFieldException, IllegalAccessException {
+        SendMethodStrategy service = factory.chooseStrategy(nameJson);
         NameJson response = service.buildResponse(nameJson);
         return ResponseEntity.ok(response);
     }

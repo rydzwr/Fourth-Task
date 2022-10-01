@@ -6,11 +6,11 @@ public class CommonNameStrategy implements SendMethodStrategy {
 
     @Override
     public NameJson buildResponse(NameJson nameJson) {
-        return null;
+        return nameJson;
     }
 
     @Override
-    public boolean applies(String name) {
+    public boolean applies(NameJson nameJson) {
         return false;
     }
 }

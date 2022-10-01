@@ -1,16 +1,17 @@
 package com.rydzwr.strategy;
 
 import com.rydzwr.dto.NameJson;
+import com.rydzwr.exception.MissingParameterException;
 
 public class SendErrorStrategy implements SendMethodStrategy {
 
     @Override
     public NameJson buildResponse(NameJson nameJson) {
-        return null;
+        throw new MissingParameterException("Missing name parameter");
     }
 
     @Override
-    public boolean applies(String name) {
-        return false;
+    public boolean applies(NameJson nameJson) {
+        return nameJson.getValue() == null;
     }
 }
