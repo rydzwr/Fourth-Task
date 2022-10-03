@@ -2,7 +2,7 @@ package com.rydzwr.controller;
 
 import com.rydzwr.dto.NameJson;
 import com.rydzwr.service.ServiceFactory;
-import com.rydzwr.strategy.SendMethodStrategy;
+import com.rydzwr.model.SendMethodStrategy;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;

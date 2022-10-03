@@ -1,4 +1,4 @@
-package com.rydzwr.strategy;
+package com.rydzwr.model;
 
 import com.rydzwr.dto.NameJson;
 

@@ -2,6 +2,7 @@ package com.rydzwr.strategy;
 
 import com.rydzwr.dto.NameJson;
 import com.rydzwr.exception.EasterEggException;
+import com.rydzwr.model.SendMethodStrategy;
 
 public class SendEasterEggStrategy implements SendMethodStrategy {
 

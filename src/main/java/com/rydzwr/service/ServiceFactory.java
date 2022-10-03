@@ -1,6 +1,7 @@
 package com.rydzwr.service;
 
 import com.rydzwr.dto.NameJson;
+import com.rydzwr.model.SendMethodStrategy;
 import com.rydzwr.strategy.*;
 import org.springframework.stereotype.Service;
 
