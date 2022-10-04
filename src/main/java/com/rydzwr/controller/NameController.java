@@ -1,6 +1,7 @@
 package com.rydzwr.controller;
 
 import com.rydzwr.dto.NameJson;
+import com.rydzwr.service.SendStrategyFactory;
 import com.rydzwr.service.ServiceFactory;
 import com.rydzwr.model.SendMethodStrategy;
 import org.springframework.http.ResponseEntity;
@@ -13,15 +14,15 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/v1")
 public class NameController {
 
-    private final ServiceFactory factory;
+    private final SendStrategyFactory factory;
 
-    public NameController(ServiceFactory factory) {
+    public NameController(SendStrategyFactory factory) {
         this.factory = factory;
     }
 
     @PostMapping(value = "/validator")
     public ResponseEntity<NameJson> validateName(@RequestBody NameJson nameJson) throws NoSuchFieldException, IllegalAccessException {
-        SendMethodStrategy service = factory.chooseStrategy(nameJson);
+        SendMethodStrategy service = factory.getStrategy(nameJson.getValue());
         NameJson response = service.buildResponse(nameJson);
         return ResponseEntity.ok(response);
     }

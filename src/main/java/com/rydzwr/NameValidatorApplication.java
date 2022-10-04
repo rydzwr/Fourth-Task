@@ -1,6 +1,5 @@
 package com.rydzwr;
 
-import com.rydzwr.service.AnnotationValueExtractor;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
