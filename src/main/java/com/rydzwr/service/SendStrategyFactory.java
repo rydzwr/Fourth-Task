@@ -13,18 +13,15 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 import java.util.regex.Pattern;
 
-@Service
 public class SendStrategyFactory {
+    private final Map<String, Class<SendMethodStrategy>> strategyMap;
 
-    public SendMethodStrategy getStrategy(String name) throws ClassNotFoundException, NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
-        Map<String, Class<SendMethodStrategy>> strategyMap = buildMap();
-        if (strategyMap.containsKey(name)) {
-            return (SendMethodStrategy) Class.forName(strategyMap.get(name).getName())
-                    .getConstructor()
-                    .newInstance();
-        }
+    public SendStrategyFactory() throws ClassNotFoundException {
+        strategyMap = buildMap();
+    }
 
-        return new CommonNameStrategy();
+    public Map<String, Class<SendMethodStrategy>> getMap() {
+        return new HashMap<>(strategyMap);
     }
 
     public Map<String, Class<SendMethodStrategy>> buildMap() throws ClassNotFoundException {

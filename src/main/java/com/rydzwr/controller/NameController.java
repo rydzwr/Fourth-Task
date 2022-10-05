@@ -1,6 +1,7 @@
 package com.rydzwr.controller;
 
 import com.rydzwr.dto.NameJson;
+import com.rydzwr.factory.ServiceFactory;
 import com.rydzwr.service.SendStrategyFactory;
 import com.rydzwr.model.SendMethodStrategy;
 import org.springframework.http.ResponseEntity;
@@ -15,9 +16,9 @@ import java.lang.reflect.InvocationTargetException;
 @RequestMapping("/api/v1")
 public class NameController {
 
-    private final SendStrategyFactory factory;
+    private final ServiceFactory factory;
 
-    public NameController(SendStrategyFactory factory) {
+    public NameController(ServiceFactory factory) {
         this.factory = factory;
     }
 
