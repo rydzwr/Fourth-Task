@@ -5,6 +5,7 @@ import com.rydzwr.model.Names;
 import com.rydzwr.model.SendMethodStrategy;
 import com.rydzwr.model.SupportedNames;
 import com.rydzwr.model.Target;
+import com.rydzwr.service.TargetValueResolver;
 
 import java.lang.reflect.Field;
 import java.util.Arrays;
@@ -15,9 +16,7 @@ import java.util.stream.Collectors;
 public class SavedViewsStrategy implements SendMethodStrategy {
 
     @Override
-    public NameJson buildResponse(NameJson nameJson) throws NoSuchFieldException, IllegalAccessException {
-        Field field = Names.class.getDeclaredField(nameJson.getValue());
-        Target annotation = field.getAnnotation(Target.class);
-        return new NameJson(annotation.value(), (String) field.get(null));
+    public NameJson buildResponse(NameJson nameJson) {
+        return TargetValueResolver.getInstance().resolve(nameJson);
     }
 }

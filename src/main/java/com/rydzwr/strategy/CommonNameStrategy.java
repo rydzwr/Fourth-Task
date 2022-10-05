@@ -2,6 +2,7 @@ package com.rydzwr.strategy;
 
 import com.rydzwr.dto.NameJson;
 import com.rydzwr.model.SendMethodStrategy;
+import com.rydzwr.service.TargetValueResolver;
 
 public class CommonNameStrategy implements SendMethodStrategy {
 
