@@ -20,11 +20,4 @@ public class SavedViewsStrategy implements SendMethodStrategy {
         Target annotation = field.getAnnotation(Target.class);
         return new NameJson(annotation.value(), (String) field.get(null));
     }
-
-    @Override
-    public boolean applies(NameJson nameJson) {
-        SupportedNames annotation = this.getClass().getAnnotation(SupportedNames.class);
-        List<String> savedViews = Arrays.stream(annotation.value()).collect(Collectors.toList());
-        return savedViews.contains(nameJson.getValue());
-    }
 }

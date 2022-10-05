@@ -7,7 +7,7 @@ import java.io.IOException;
 
 public class SendStrategyFactoryTest {
     @Test
-    public void createConstructor() throws IOException {
+    public void createConstructor() throws IOException, ClassNotFoundException {
         SendStrategyFactory strategyFactory = new SendStrategyFactory();
     }
 }

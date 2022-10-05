@@ -10,9 +10,4 @@ public class SendErrorStrategy implements SendMethodStrategy {
     public NameJson buildResponse(NameJson nameJson) {
         throw new MissingParameterException("Missing name parameter");
     }
-
-    @Override
-    public boolean applies(NameJson nameJson) {
-        return nameJson.getValue() == null;
-    }
 }
