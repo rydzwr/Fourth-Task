@@ -11,25 +11,26 @@ import java.util.*;
 import java.util.regex.Pattern;
 
 public class SendStrategyFactory {
-    private final Map<String, Class<SendMethodStrategy>> strategyMap;
+    private final Map<String, SendMethodStrategy> strategyMap;
 
-    public SendStrategyFactory() throws ClassNotFoundException {
+    public SendStrategyFactory() throws Exception {
         strategyMap = buildMap();
     }
 
-    public Map<String, Class<SendMethodStrategy>> getMap() {
+    public Map<String, SendMethodStrategy> getMap() {
         return new HashMap<>(strategyMap);
     }
 
-    public Map<String, Class<SendMethodStrategy>> buildMap() throws ClassNotFoundException {
-        Map<String, Class<SendMethodStrategy>> strategyMap = new HashMap<>();
-        List<Class> strategies = getClasses();
-        for (Class strategy : strategies) {
-            if (strategy.isAnnotationPresent(SupportedNames.class)) {
-                SupportedNames annotation = (SupportedNames) strategy.getAnnotation(SupportedNames.class);
+    public Map<String, SendMethodStrategy> buildMap() throws Exception {
+        Map<String, SendMethodStrategy> strategyMap = new HashMap<>();
+        List<SendMethodStrategy> strategies = createInstances();
+        for (SendMethodStrategy strategy : strategies) {
+            if (strategy.getClass().isAnnotationPresent(SupportedNames.class)) {
+                SupportedNames annotation = strategy.getClass().getAnnotation(SupportedNames.class);
                 Arrays.stream(annotation.value()).forEach(name -> {
-                    if (strategyMap.containsKey(name))
+                    if (strategyMap.containsKey(name)) {
                         throw new IllegalArgumentException("Duplicate name in annotation!");
+                    }
                     strategyMap.put(name, strategy);
                 });
             }
@@ -37,8 +38,8 @@ public class SendStrategyFactory {
         return strategyMap;
     }
 
-    public List<Class> getClasses() throws ClassNotFoundException {
-        List<Class> out = new ArrayList<>();
+    public List<Class<?>> getClasses() throws ClassNotFoundException {
+        List<Class<?>> out = new ArrayList<>();
         ClassPathScanningCandidateComponentProvider provider = new ClassPathScanningCandidateComponentProvider(false);
         provider.addIncludeFilter(new RegexPatternTypeFilter(Pattern.compile(".*")));
         String packageName = "com.rydzwr.strategy";
@@ -48,5 +49,24 @@ public class SendStrategyFactory {
             out.add(clazz);
         }
         return out;
+    }
+
+    public List<SendMethodStrategy> createInstances() throws Exception {
+        List<Class<?>> strategies = getClasses();
+        List<SendMethodStrategy> out = new ArrayList<>();
+        try {
+            for (int i = 0; i < strategies.size(); i++) {
+                if (!SendMethodStrategy.class.isAssignableFrom(strategies.get(i))) {
+                    strategies.remove(i);
+                }
+            }
+            for (Class<?> strategy : strategies) {
+                SendMethodStrategy sendMethodStrategy = (SendMethodStrategy) Class.forName(strategy.getName()).getConstructor().newInstance();
+                out.add(sendMethodStrategy);
+            }
+            return out;
+        } catch (Exception e) {
+            throw new Exception("Internal Server Error -> Couldn't create instances");
+        }
     }
 }

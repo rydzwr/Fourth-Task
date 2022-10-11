@@ -14,7 +14,7 @@ public class TargetValueResolver {
 
     public static TargetValueResolver getInstance() {
         if (instance == null) {
-            return new TargetValueResolver();
+            instance = new TargetValueResolver();
         }
         return instance;
     }
