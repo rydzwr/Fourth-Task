@@ -1,6 +1,5 @@
 package com.rydzwr.service;
 
-
 import com.rydzwr.model.SendMethodStrategy;
 import com.rydzwr.model.SupportedNames;
 import org.springframework.beans.factory.config.BeanDefinition;
@@ -10,10 +9,10 @@ import org.springframework.core.type.filter.RegexPatternTypeFilter;
 import java.util.*;
 import java.util.regex.Pattern;
 
-public class SendStrategyFactory {
+public class SendStrategyService {
     private final Map<String, SendMethodStrategy> strategyMap;
 
-    public SendStrategyFactory() throws Exception {
+    public SendStrategyService() throws Exception {
         strategyMap = buildMap();
     }
 
@@ -21,7 +20,7 @@ public class SendStrategyFactory {
         return new HashMap<>(strategyMap);
     }
 
-    public Map<String, SendMethodStrategy> buildMap() throws Exception {
+    private Map<String, SendMethodStrategy> buildMap() throws Exception {
         Map<String, SendMethodStrategy> strategyMap = new HashMap<>();
         List<SendMethodStrategy> strategies = createInstances();
         for (SendMethodStrategy strategy : strategies) {
@@ -38,10 +37,11 @@ public class SendStrategyFactory {
         return strategyMap;
     }
 
-    public List<Class<?>> getClasses() throws ClassNotFoundException {
+    private List<Class<?>> getClasses() throws ClassNotFoundException {
         List<Class<?>> out = new ArrayList<>();
         ClassPathScanningCandidateComponentProvider provider = new ClassPathScanningCandidateComponentProvider(false);
         provider.addIncludeFilter(new RegexPatternTypeFilter(Pattern.compile(".*")));
+        @SuppressWarnings("SpellCheckingInspection")
         String packageName = "com.rydzwr.strategy";
         Set<BeanDefinition> classes = provider.findCandidateComponents(packageName);
         for (BeanDefinition bean : classes) {
@@ -51,7 +51,7 @@ public class SendStrategyFactory {
         return out;
     }
 
-    public List<SendMethodStrategy> createInstances() throws Exception {
+    private List<SendMethodStrategy> createInstances() throws Exception {
         List<Class<?>> strategies = getClasses();
         List<SendMethodStrategy> out = new ArrayList<>();
         try {

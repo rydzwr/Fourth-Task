@@ -25,7 +25,7 @@ public class TargetValueResolver {
             Target annotation = field.getAnnotation(Target.class);
             return new NameJson(annotation.value(), (String) field.get(null));
         }catch (Exception e) {
-            throw new TargetValueResolverException("Couldn't resolve field or annotation value");
+            throw new TargetValueResolverException("Internal Server Error! -> Target Value Resolver");
         }
     }
 }
