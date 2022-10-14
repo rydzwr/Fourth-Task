@@ -25,6 +25,7 @@ public class SendStrategyServiceTest {
         SendStrategyService service = new SendStrategyService();
         Map<String, SendMethodStrategy> toTest = service.getMap();
         Map<String, Class<? extends SendMethodStrategy>> classes = new HashMap<>();
+        classes.equals(false);
 
         for (Map.Entry<String, SendMethodStrategy> pair: toTest.entrySet()) {
             classes.put(pair.getKey(), pair.getValue().getClass());

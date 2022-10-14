@@ -2,6 +2,7 @@ package com.rydzwr.service;
 
 import com.rydzwr.model.SendMethodStrategy;
 import com.rydzwr.model.SupportedNames;
+import lombok.SneakyThrows;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.context.annotation.ClassPathScanningCandidateComponentProvider;
 import org.springframework.core.type.filter.RegexPatternTypeFilter;
@@ -9,10 +10,12 @@ import org.springframework.core.type.filter.RegexPatternTypeFilter;
 import java.util.*;
 import java.util.regex.Pattern;
 
+import static java.util.stream.Collectors.toList;
+
 public class SendStrategyService {
     private final Map<String, SendMethodStrategy> strategyMap;
 
-    public SendStrategyService() throws Exception {
+    public SendStrategyService() {
         strategyMap = buildMap();
     }
 
@@ -20,7 +23,7 @@ public class SendStrategyService {
         return new HashMap<>(strategyMap);
     }
 
-    private Map<String, SendMethodStrategy> buildMap() throws Exception {
+    private Map<String, SendMethodStrategy> buildMap() {
         Map<String, SendMethodStrategy> strategyMap = new HashMap<>();
         List<SendMethodStrategy> strategies = createInstances();
         for (SendMethodStrategy strategy : strategies) {
@@ -37,7 +40,8 @@ public class SendStrategyService {
         return strategyMap;
     }
 
-    private List<Class<?>> getClasses() throws ClassNotFoundException {
+    @SneakyThrows
+    private List<Class<?>> getClasses() {
         List<Class<?>> out = new ArrayList<>();
         ClassPathScanningCandidateComponentProvider provider = new ClassPathScanningCandidateComponentProvider(false);
         provider.addIncludeFilter(new RegexPatternTypeFilter(Pattern.compile(".*")));
@@ -51,22 +55,17 @@ public class SendStrategyService {
         return out;
     }
 
-    private List<SendMethodStrategy> createInstances() throws Exception {
-        List<Class<?>> strategies = getClasses();
-        List<SendMethodStrategy> out = new ArrayList<>();
-        try {
-            for (int i = 0; i < strategies.size(); i++) {
-                if (!SendMethodStrategy.class.isAssignableFrom(strategies.get(i))) {
-                    strategies.remove(i);
-                }
-            }
-            for (Class<?> strategy : strategies) {
-                SendMethodStrategy sendMethodStrategy = (SendMethodStrategy) Class.forName(strategy.getName()).getConstructor().newInstance();
-                out.add(sendMethodStrategy);
-            }
-            return out;
-        } catch (Exception e) {
-            throw new Exception("Internal Server Error -> Couldn't create instances");
-        }
+    private List<SendMethodStrategy> createInstances() {
+        return getClasses()
+                .stream()
+                .filter(SendMethodStrategy.class::isAssignableFrom)
+                .map(s -> {
+                    try {
+                        return (SendMethodStrategy) Class.forName(s.getName()).getConstructor().newInstance();
+                    } catch (Exception e) {
+                        throw new RuntimeException(e);
+                    }
+                })
+                .collect(toList());
     }
 }

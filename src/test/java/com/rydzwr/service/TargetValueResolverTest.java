@@ -5,8 +5,19 @@ import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class TargetValueResolverTest {
+
+    @Test
+    public void instancesShouldBeEqual() {
+        // GIVEN
+        TargetValueResolver resolverInstanceOne = TargetValueResolver.getInstance();
+        TargetValueResolver resolverInstanceTwo = TargetValueResolver.getInstance();
+
+        // WHEN + THEN
+        assertEquals(resolverInstanceOne, resolverInstanceTwo);
+    }
 
     @Test
     public void shouldReturnHalValue() {
